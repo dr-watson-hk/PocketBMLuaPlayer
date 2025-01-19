@@ -18,12 +18,9 @@ BeatMachine.PlayTheBeat(0)
 
 Credits:
 
-SquidGod - Lua Playdate Template
+SquidGod - Lua Playdate Template: https://github.com/SquidGodDev/playdate-template
 
-https://github.com/SquidGodDev/playdate-template
-
-C version:
-https://github.com/dr-watson-hk/PocketBMPlayer
+C version: https://github.com/dr-watson-hk/PocketBMPlayer
 
 --------------------------------------------------------------------------------
 Copyright (C) Khors Media
