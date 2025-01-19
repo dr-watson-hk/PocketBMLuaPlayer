@@ -6,15 +6,20 @@ The format of a beat file is just plain JSON so nothing fancy here, just some co
 
 Here is an example of using the player code in your project:
 
+
 import "beatmachine.lua"
 
 BeatMachine.Create()
+
 BeatMachine.LoadBeat('beats/demo.bmf')
+
 BeatMachine.PlayTheBeat(0)
 
 
 Credits:
+
 SquidGod - Lua Playdate Template
+
 https://github.com/SquidGodDev/playdate-template
 
 
