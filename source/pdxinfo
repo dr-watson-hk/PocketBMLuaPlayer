@@ -1,0 +1,7 @@
+name=PocketBMLuaPlayer
+author=Khors Media
+description=Player for PocketBM (Lua)
+bundleID=com.khors.luaplayer
+version=1.0.0
+buildNumber=1
+imagePath=system/

@@ -1,0 +1,6 @@
+When you build your game using the build task, 
+the compiled game executable (.pdx) gets placed
+in this folder. The game executable is what you
+share with others so they can play your game.
+
+You can delete this .txt file
