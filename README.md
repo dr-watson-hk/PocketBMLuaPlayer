@@ -22,7 +22,8 @@ SquidGod - Lua Playdate Template
 
 https://github.com/SquidGodDev/playdate-template
 
-
+C version:
+https://github.com/dr-watson-hk/PocketBMPlayer
 
 --------------------------------------------------------------------------------
 Copyright (C) Khors Media
