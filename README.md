@@ -10,7 +10,9 @@ Here is an example of using the player code in your project:
 import "beatmachine.lua"
 
 BeatMachine.Create()
+
 BeatMachine.LoadBeat('beats/demo.bmf')
+
 BeatMachine.PlayTheBeat(0)
 
 
