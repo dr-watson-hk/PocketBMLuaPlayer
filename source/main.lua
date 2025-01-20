@@ -25,16 +25,22 @@ import "beatmachine.lua"
 
 BeatMachine.Create()
 BeatMachine.LoadBeat('beats/demo.bmf')
-BeatMachine.PlayTheBeat(1)
+BeatMachine.PlayTheBeat(0)
 
 pd.display.setRefreshRate(0)
 
 function playdate.update()
 	gfx.clear(gfx.kColorWhite)
 	gfx.setColor(gfx.kColorBlack)
-	
+
 	BeatMachine.Update()
-	
+
+	local step = BeatMachine.sequence:getCurrentStep()
+
+	local text = "Step: " .. step
+
+	gfx.drawText(text, 10, 100)
+
 	pd.drawFPS(10, 10)
 
 end

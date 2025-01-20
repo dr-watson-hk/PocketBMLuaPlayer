@@ -22,6 +22,7 @@ local pd <const> = playdate
 local gfx <const> = pd.graphics
 local snd <const> = pd.sound
 
+import "scalemanager.lua"
 
 BM_CONST =
 {
@@ -79,7 +80,6 @@ SoundSrcType =
 }
 
 BeatMachine = {}
-ScaleManager = {}
 
 
 function BeatMachine.CreateTrack()
@@ -107,22 +107,9 @@ function BeatMachine.CreateTrack()
 	track.muted = false
 	track.isChordTrack = false
 
-	track.delayline = snd.delayline.new(128)
-	track.isDelayEnabled = false
-	track.delayFeedback = 0.5
-	track.delayMix = 0.5
-
-	track.filter = snd.twopolefilter.new(snd.kFilterLowPass)
-	track.isFilterEnabled = false
-	track.filterFreq = 20000
-	track.filterResn = 0.0
-	track.filterMix = 0.5
-	track.filterType = snd.kFilterLowPass
-
-	track.bitCrusher = snd.bitcrusher.new()
-	track.isBitCrusherEnabled = false
-	track.bitCrusherAmount = 0.5
-	track.bitCrusherMix = 0.5
+	track.delayline = nil
+	track.filter = nil
+	track.bitCrusher = nil
 
 	return track
 
@@ -130,6 +117,8 @@ end
 
 
 function BeatMachine.Create()
+
+	ScaleManager.Create()
 
 	BeatMachine.sequence = snd.sequence.new()
 
@@ -169,6 +158,8 @@ function BeatMachine.LoadBeat(path)
 	print("Version: " .. data.beat.ver)
 	
 	print("Scale: " .. data.beat.scale.base .. " " .. data.beat.scale.type)
+
+	ScaleManager.SetupScaleWithString(data.beat.scale.type, data.beat.scale.base)
 
 	print("BMP: " .. data.beat.BPM)
 
@@ -215,22 +206,25 @@ function BeatMachine.LoadBeat(path)
 					track.synth:setSustain(trackData.env.s)
 					track.synth:setRelease(trackData.env.r)
 				else
-					track.synth:setAttack(0.0)
-					track.synth:setDecay(0.2)
-					track.synth:setSustain(0.3)
-					track.synth:setRelease(0.5)
+					-- use defaults instead
+					--track.synth:setAttack(0.0)
+					--track.synth:setDecay(0.2)
+					--track.synth:setSustain(0.3)
+					--track.synth:setRelease(0.5)
 				end
 				
 
 				track.instrument = snd.instrument.new()
-				track.instrument:addVoice(track.synth, 24, 127, 0)
+				track.instrument:addVoice(track.synth)
 
 				-- chord track will play 3 notes at the same time
 				if trackData.chord ~= nil and  trackData.chord == 1 then
 					for k = 1, 2 do
-						track.instrument:addVoice(track.synth:copy(), 24, 127, 0)
+						track.instrument:addVoice(track.synth:copy())
 					end
 					
+					track.isChordTrack = true
+
 				end
 
 				track.channel = snd.channel.new()
@@ -245,12 +239,78 @@ function BeatMachine.LoadBeat(path)
 				
 				BeatMachine.sequence:addTrack(track.track)
 
+				if trackData.filter ~= nil then
+
+					local filterType = snd.kFilterLowPass
+
+					if trackData.filter.type == 1 then
+						filterType = snd.kFilterHighPass
+					elseif trackData.filter.type == 2 then
+						filterType = snd.kFilterBandPass
+					elseif trackData.filter.type == 3 then
+						filterType = snd.kFilterNotch
+					end
+
+					track.filter = snd.twopolefilter.new(filterType)
+					track.filter:setFrequency(trackData.filter.freq)
+					track.filter:setResonance(trackData.filter.resn)
+					track.filter:setMix(trackData.filter.mix)
+
+					track.channel:addEffect(track.filter)
+					
+				end
+
+				
+				if trackData.delay ~= nil then
+
+					-- Lua and C seems to have different paraments for setting up delay.
+					-- may need to do some adjustment
+					track.delayline = snd.delayline.new(0.01)
+					track.delayline:setFeedback(trackData.delay.feedback)
+					track.delayline:setMix(trackData.delay.mix)
+
+					track.channel:addEffect(track.delayline)
+
+				end
+
+				if trackData.bitcrush ~= nil then
+
+					track.bitCrusher = snd.bitcrusher.new()
+					track.bitCrusher:setAmount(trackData.bitcrush.amount)
+					track.bitCrusher:setMix(trackData.bitcrush.mix)
+
+					track.channel:addEffect(track.bitCrusher)
+
+				end
+
 				local noteCount = #trackData.notes
 				for n = 1, noteCount do
 					local note = trackData.notes[n]
 					-- for Lua, step seem to start from 1, same as the index of an array
 					-- step starts from 0 when saved in BMF so we need to add 1 to it
 					track.track:addNote(note.step + 1, note.pitch, note.len, note.vel)
+
+					if track.isChordTrack then
+						-- if this is a chord track, add extra 2 notes to play
+						local noteIndex = ScaleManager.noteToIndexTable[note.pitch]
+
+						local noteIndex3 = noteIndex + 2
+						if noteIndex3 > ScaleManager.maxIndex then
+							noteIndex3 -= ScaleManager.currentScalePitchCount
+						end
+
+						local note3 = ScaleManager.currentNoteValueTable[noteIndex3]
+						track.track:addNote(note.step + 1, note3, note.len, note.vel)
+
+						local noteIndex5 = noteIndex + 4
+						if noteIndex5 > ScaleManager.maxIndex then
+							noteIndex5 -= ScaleManager.currentScalePitchCount
+						end
+
+						local note5 = ScaleManager.currentNoteValueTable[noteIndex5]
+						track.track:addNote(note.step + 1, note5, note.len, note.vel)
+
+					end
 				end
 
 			end
