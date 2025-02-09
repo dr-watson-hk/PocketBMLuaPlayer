@@ -1,5 +1,9 @@
 # PocketBMLuaPlayer
- 
+
+C version:
+https://github.com/dr-watson-hk/PocketBMPlayer
+
+
 PocketBM is a beat making app for PlayDate. This project is the source code for playing back beat files created by PocketBM.
 
 The format of a beat file is just plain JSON so nothing fancy here, just some codes for decoding JSON, setting up synths and filling in MIDI notes in the sequencer for playback.
@@ -10,12 +14,12 @@ Here is an example of using the player code in your project:
 import "beatmachine.lua"
 
 BeatMachine.Create()
+
 BeatMachine.LoadBeat('beats/demo.bmf')
+
 BeatMachine.PlayTheBeat(0)
 
 
-C version:
-https://github.com/dr-watson-hk/PocketBMPlayer
 
 
 Credits: 
