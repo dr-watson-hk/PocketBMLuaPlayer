@@ -111,6 +111,8 @@ function BeatMachine.CreateTrack()
 	track.filter = nil
 	track.bitCrusher = nil
 
+	track.isDrumTrack = false
+
 	return track
 
 end
@@ -239,6 +241,10 @@ function BeatMachine.LoadBeat(path)
 				
 				BeatMachine.sequence:addTrack(track.track)
 
+				if trackData.is_drum ~= nil then
+					track.isDrumTrack = trackData.is_drum == 1
+				end
+
 				if trackData.filter ~= nil then
 
 					local filterType = snd.kFilterLowPass
@@ -288,7 +294,13 @@ function BeatMachine.LoadBeat(path)
 					local note = trackData.notes[n]
 					-- for Lua, step seem to start from 1, same as the index of an array
 					-- step starts from 0 when saved in BMF so we need to add 1 to it
-					track.track:addNote(note.step + 1, note.pitch, note.len, note.vel)
+
+					if track.isDrumTrack then
+						track.track:addNote(note.step + 1, NOTES.NOTE_C, note.len, note.vel)
+					else
+						track.track:addNote(note.step + 1, note.pitch, note.len, note.vel)
+					end
+					
 
 					if track.isChordTrack then
 						-- if this is a chord track, add extra 2 notes to play
