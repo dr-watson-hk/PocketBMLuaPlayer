@@ -24,7 +24,7 @@ local gfx <const> = pd.graphics
 import "beatmachine.lua"
 
 BeatMachine.Create()
-BeatMachine.LoadBeat('beats/demo.bmf')
+BeatMachine.LoadBeat('beats/cowb.bmf')
 BeatMachine.PlayTheBeat(0)
 
 pd.display.setRefreshRate(0)

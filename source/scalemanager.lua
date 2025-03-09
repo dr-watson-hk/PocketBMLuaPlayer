@@ -91,7 +91,8 @@ NOTES =
     NOTE_A = 9,
     NOTE_A_SHARP = 10,
     NOTE_B = 11,
-    NOTE_COUNT = 12
+    NOTE_COUNT = 12,
+    NOTE_C4 = 60
 }
 
 PitchNames =
@@ -118,7 +119,7 @@ SCALE_CONSTS =
     SCALE_NOTE_MIN = 24,
     SCALE_NOTE_MAX = 119,
 
-    SCALE_BUFFER_SIZE = 128
+    SCALE_BUFFER_SIZE = 128,
 }
 
 ChromaticScale = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };

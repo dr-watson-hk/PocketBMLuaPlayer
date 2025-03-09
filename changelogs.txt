@@ -1,0 +1,38 @@
+v1.3.3 (2025.02.18)
+-------------------
+Fixed:
+- scale settings UI is not updated when loads a beat file
+
+Added:
+- tracks can be flagged to ignore global scale settings
+- new track/channel settings menu which can be triggered by moving cursor to the far left
+
+
+v1.3.1  (2025.02.11)
+-------------------
+Fixed:
+- better handling of MIDI delta time
+- delay effect is more audible
+
+
+v1.3.0 (2025.02.08)
+-------------------
+Fixed:
+- filter setting not saved
+- potential random values of track settings
+
+Added:
+- track can be marked as "drum" so  the pitch stays as C4 and it won't be affected by scale changes
+- import MIDI file
+
+
+v1.2.3 (2025.01.19)
+-------------------
+Fixed:
+- potential crash when creating new beats
+
+
+v1.1.0 (2025.01.14)
+-------------------
+- first release
+

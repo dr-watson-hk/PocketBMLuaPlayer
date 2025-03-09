@@ -155,6 +155,8 @@ end
 
 function BeatMachine.LoadBeat(path)
 
+	print("path: " .. path)
+
 	local data = json.decodeFile(path)
 
 	print("Version: " .. data.beat.ver)
@@ -193,6 +195,11 @@ function BeatMachine.LoadBeat(path)
 					track.sampleName = trackData.sample
 					local path = "samples/" .. track.sampleName
 					local sampler = snd.sample.new(path)
+
+					if sampler == nil then
+						print("sampler is nil")
+					end
+
 					track.synth = snd.synth.new(sampler)
 				else
 
@@ -296,7 +303,7 @@ function BeatMachine.LoadBeat(path)
 					-- step starts from 0 when saved in BMF so we need to add 1 to it
 
 					if track.isDrumTrack then
-						track.track:addNote(note.step + 1, NOTES.NOTE_C, note.len, note.vel)
+						track.track:addNote(note.step + 1, NOTES.NOTE_C4, note.len, note.vel)
 					else
 						track.track:addNote(note.step + 1, note.pitch, note.len, note.vel)
 					end
